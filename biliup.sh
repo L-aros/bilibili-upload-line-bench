@@ -117,10 +117,10 @@ trap 'exit 130' INT
 trap 'exit 143' TERM
 
 if [[ "$NO_COLOR" -eq 0 && -t 1 ]]; then
-  C_GREEN=$'\033[32m'; C_YELLOW=$'\033[33m'; C_RED=$'\033[31m'
+  C_YELLOW=$'\033[33m'; C_RED=$'\033[31m'
   C_CYAN=$'\033[36m'; C_BOLD=$'\033[1m'; C_RESET=$'\033[0m'
 else
-  C_GREEN=""; C_YELLOW=""; C_RED=""; C_CYAN=""; C_BOLD=""; C_RESET=""
+  C_YELLOW=""; C_RED=""; C_CYAN=""; C_BOLD=""; C_RESET=""
 fi
 
 section() {
@@ -331,7 +331,7 @@ probe_host() {
 
 print_results() {
   local sorted="$TMP_DIR/results-sorted.tsv" rank=0
-  local best_labels best_host best_success best_p95
+  local best_labels best_success best_p95
   sort -t $'\t' -k3,3nr -k9,9n -k10,10n "$TMP_DIR/results.tsv" >"$sorted"
 
   printf '\n  %-4s %-31s %8s %8s %8s %8s %8s %8s %8s %s\n' \
@@ -360,7 +360,7 @@ print_results() {
     printf '  curl 常见错误：6=DNS，7=连接失败，28=超时，35=TLS，60=证书校验。\n'
   fi
 
-  IFS=$'\t' read -r best_labels best_host best_success _ _ _ _ _ best_p95 _ _ <"$sorted"
+  IFS=$'\t' read -r best_labels _ best_success _ _ _ _ _ best_p95 _ _ <"$sorted"
   if awk -v s="$best_success" 'BEGIN {exit !(s >= 90)}'; then
     printf '\n  当前推荐候选：%s（成功率 %s%%，P95 %sms）\n' \
       "$best_labels" "$best_success" "$best_p95"
