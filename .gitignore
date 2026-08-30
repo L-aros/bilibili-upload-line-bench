@@ -1,0 +1,4 @@
+*.log
+test_result.txt
+.idea/
+.vscode/

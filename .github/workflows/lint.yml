@@ -1,0 +1,24 @@
+name: lint
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  shell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Install ShellCheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+      - name: Bash syntax
+        run: bash -n biliup.sh tests/smoke.sh
+      - name: ShellCheck
+        run: shellcheck biliup.sh tests/smoke.sh
+      - name: Smoke test
+        run: bash tests/smoke.sh
